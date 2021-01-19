@@ -1,5 +1,6 @@
 from pyowm.owm import OWM
 from datetime import datetime
+from sense_hat import SenseHat
 import time
 
 def degToCompass(num):
@@ -7,7 +8,9 @@ def degToCompass(num):
     arr=["N","NNE","NE","ENE","E","ESE", "SE", "SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"]
     return arr[(val % 16)]
 
-owm = OWM('529ba6f1c4c018b7b2cf0e317c79cbbd')
+sense = SenseHat()
+
+owm = OWM('529ba6f1c4c018b7b2cf0e317c79cbbd')  # My OpenWeatherMap API Key
 mgr = owm.weather_manager()
 one_call = mgr.one_call(lat=42.8725, lon=-83.0269, exclude='minutely,hourly', units='metric')
 
@@ -43,34 +46,34 @@ while True:
     outdoor_wind_dir = degToCompass(observation.wnd["deg"])
     outdoor_rain_1hr = .15  # observation.rain['1h'] + observation.snow["1h"]
 
-    indoor_humidity = 45
-    indoor_temp = 71
-    print("0, ", \
-          xfer_dt, ", ", \
-          iso_dt, ", ", \
-          ".5,", \
-          " ", \
-          indoor_humidity, ", ", \
-          indoor_temp, ", ", \
-          outdoor_humidity, ", ", \
-          outdoor_dewpoint, ", ", \
-          outdoor_temp, ", ", \
-          outdoor_temp_feel, ", ", \
-          "0, ", \
-          outdoor_pressure, ", ", \
-          outdoor_wind_ave, ", ", \
-          "0, ", \
-          outdoor_wind_gust, ", ", \
-          "0, ", \
-          "0, ", \
-          outdoor_wind_dir, ", ", \
-          "0, ", \
-          "0, ", \
-          "0, ", \
-          outdoor_rain_1hr, ", ", \
-          "0, ", \
-          "0, ", \
-          "0, ", \
+    indoor_humidity = round(sense.get_humidity(),2)
+    indoor_temp     = round(sense.get_temperature(),2)
+
+    print("0,",\
+          xfer_dt,",",\
+          iso_dt, ",",\
+          ".5,",\
+          indoor_humidity, ",",\
+          indoor_temp, ",",\
+          outdoor_humidity, ",",\
+          outdoor_dewpoint, ",",\
+          outdoor_temp, ",",\
+          outdoor_temp_feel, ",",\
+          "0, ",\
+          outdoor_pressure, ",",\
+          outdoor_wind_ave, ",",\
+          "0,",\
+          outdoor_wind_gust, ",",\
+          "0,",\
+          "0,",\
+          outdoor_wind_dir, ",",\
+          "0,",\
+          "0,",\
+          "0,",\
+          outdoor_rain_1hr, ",",\
+          "0,",\
+          "0,",\
+          "0,",\
           "0 ")
 
     time.sleep(5)
